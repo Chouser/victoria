@@ -1,0 +1,9 @@
+/.nrepl*
+/.repl*
+/boot-stuff
+/nodejs-stuff
+/js
+/resources/public/js
+/target
+/cljs.jar
+.#*
