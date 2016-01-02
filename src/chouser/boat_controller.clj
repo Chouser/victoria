@@ -3,6 +3,7 @@
             ring.middleware.content-type
             ring.middleware.not-modified
             [ring.adapter.jetty :as jetty]
+            [clj-json.core :as json]
             [clojure.pprint :refer [pprint]]))
 
 (set! *warn-on-reflection* true)
@@ -23,11 +24,22 @@
         (handler (update request :uri str filename))
         response))))
 
+(defn wrap-boat-ctrls [handler]
+  (fn [{:keys [uri body] :as request}]
+    (if (not= uri "/ctrl")
+      (handler request)
+      (do
+        (prn (json/parse-string (slurp body)))
+        {:status 200
+         :headers {"Content-Type" "text/html"}
+         :body "ok"}))))
+
 (def app
   (-> default-handler
       (ring.middleware.resource/wrap-resource "public")
       (ring.middleware.content-type/wrap-content-type)
       (ring.middleware.not-modified/wrap-not-modified)
+      (wrap-boat-ctrls)
       (wrap-dir-file "/index.html")))
 
 (defn main []

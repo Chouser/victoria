@@ -1,5 +1,6 @@
 /.nrepl*
 /.repl*
+/.lein-repl-history
 /boot-stuff
 /nodejs-stuff
 /js

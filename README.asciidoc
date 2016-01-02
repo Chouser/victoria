@@ -1,0 +1,10 @@
+= TODO
+
+- enforce vertical limits with drag-offset updating
+- pin layout, esp. for mobile
+- translate control messages to servos
+- package for raspberry pi (AOT (jvm and js) in uberjar)
+
+- new graphics (show angle of sails & rudder)
+- fix touch-stealing if fingers cross
+- send ctrl positions from server, in case of multiple clients (?)
