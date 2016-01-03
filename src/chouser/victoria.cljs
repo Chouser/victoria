@@ -1,4 +1,4 @@
-(ns chouser.boat-controller
+(ns chouser.victoria
   (:require [clojure.browser.repl :as repl]
             [clojure.browser.net :as net]
             [clojure.browser.event :as event]

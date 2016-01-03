@@ -1,4 +1,4 @@
-(ns chouser.boat-controller
+(ns chouser.victoria
   (:gen-class)
   (:require ring.middleware.resource
             ring.middleware.content-type

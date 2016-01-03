@@ -59,7 +59,7 @@
        id="path3061"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccssccsscccc"
-       inkscape:export-filename="/home/chouser/proj/boat-controller/rudder.png"
+       inkscape:export-filename="/home/chouser/proj/victoria/rudder.png"
        inkscape:export-xdpi="250.33572"
        inkscape:export-ydpi="250.33572" />
     <g
@@ -67,7 +67,7 @@
        inkscape:transform-center-x="-132.65645"
        inkscape:transform-center-y="14.003981"
        transform="matrix(0.96497805,-0.26233066,-0.26233066,-0.96497805,124.13412,948.75018)"
-       inkscape:export-filename="/home/chouser/proj/boat-controller/sail.png"
+       inkscape:export-filename="/home/chouser/proj/victoria/sail.png"
        inkscape:export-xdpi="250.33572"
        inkscape:export-ydpi="250.33572">
       <path
@@ -89,7 +89,7 @@
       <path
          inkscape:export-ydpi="250.33572"
          inkscape:export-xdpi="250.33572"
-         inkscape:export-filename="/home/chouser/proj/boat-controller/hull.png"
+         inkscape:export-filename="/home/chouser/proj/victoria/hull.png"
          sodipodi:nodetypes="ssssscccccccsssssccs"
          inkscape:connector-curvature="0"
          id="path3050"
