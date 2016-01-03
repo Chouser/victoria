@@ -1,4 +1,5 @@
 (ns chouser.boat-controller
+  (:gen-class)
   (:require ring.middleware.resource
             ring.middleware.content-type
             ring.middleware.not-modified
@@ -29,6 +30,7 @@
     (if (not= uri "/ctrl")
       (handler request)
       (do
+        ;; TODO servo control goes here
         (prn (json/parse-string (slurp body)))
         {:status 200
          :headers {"Content-Type" "text/html"}
@@ -42,5 +44,7 @@
       (wrap-boat-ctrls)
       (wrap-dir-file "/index.html")))
 
-(defn main []
-  (jetty/run-jetty #'app {:port 8000}))
+(defn -main
+  ([] (-main "80"))
+  ([port]
+     (jetty/run-jetty #'app {:port (Long/parseLong port)})))
