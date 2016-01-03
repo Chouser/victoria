@@ -16,7 +16,7 @@
 
 (def maxpos 1000)
 (def ctrl-scale 2.0)
-(def ctrls (atom {:ids {} :left {:pos 0} :right {:pos 0}}))
+(def ctrls (atom {:ids {} :left {:pos 1000} :right {:pos 500}}))
 
 (defn xy [touch]
   [(.-clientX touch) (.-clientY touch)])
@@ -35,16 +35,24 @@
 
 (defn dirty! [ctrl-key]
   (schedule-draw #(js/requestAnimationFrame %)
-                 #(doseq [[ctrl-key dom-id] {:left "sails", :right "rudder"}]
-                    (set! (-> (dom/getElement dom-id) .-style .-top)
-                          (str (* 0.08 (-> @ctrls ctrl-key :pos)) "%"))))
+                 (fn []
+                   (set! (-> (dom/getElement "sails") .-style .-transform)
+                         (str "rotate("
+                              (-> @ctrls :left :pos - (+ 1000) (/ 1000) (* 80) (+ 10))
+                              "deg)"))
 
-  (schedule-send #(js/setTimeout % 1000)
-                 #(net/transmit xhr
-                                (str js/location "ctrl") "PUT"
-                                (-> {:sails (-> @ctrls :left :pos)
-                                     :rudder (-> @ctrls :right :pos)}
-                                    clj->js json/serialize))))
+                   (set! (-> (dom/getElement "rudder") .-style .-transform)
+                         (str "rotate("
+                              (-> @ctrls :right :pos - (+ 1000) (/ 1000) (* 70) (- 35))
+                              "deg)"))))
+
+  (when-not (= ctrl-key :init)
+    (schedule-send #(js/setTimeout % 1000)
+                   #(net/transmit xhr
+                                  (str js/location "ctrl") "PUT"
+                                  (-> {:sails (-> @ctrls :left :pos)
+                                       :rudder (-> @ctrls :right :pos)}
+                                      clj->js json/serialize)))))
 
 (defn touchstart [event]
   (.preventDefault event)
@@ -101,17 +109,18 @@
   (when-let [main-elem (dom/getElement "main")]
     (dom/removeNode main-elem))
 
-  (let [body (.-body js/document)
-        main-elem (dom/createDom "div" (js-obj "id" "main"))]
-    (dom/append body main-elem)
+  (let [main-elem (dom/createDom "div" (js-obj "id" "main")
+                    (dom/createDom "h1" nil (dom/createTextNode "Victoria"))
+                    (dom/createDom "div" (js-obj "id" "sails" "class" "ctrl"))
+                    (dom/createDom "div" (js-obj "id" "rudder" "class" "ctrl")))]
+    (dom/append (.-body js/document) main-elem)
 
-    (dom/append main-elem (dom/createDom "div" (js-obj "id" "sails" "class" "ctrl")))
-    (dom/append main-elem (dom/createDom "div" (js-obj "id" "rudder" "class" "ctrl")))
+    (doto main-elem
+      (events/listen "touchstart" touchstart)
+      (events/listen "touchmove" (partial touchupdate :move))
+      (events/listen "touchend"  (partial touchupdate :end))))
 
-    (events/listen main-elem "touchstart" touchstart)
-    (events/listen main-elem "touchmove" (partial touchupdate :move))
-    (events/listen main-elem "touchend"  (partial touchupdate :end)))
-
+  (dirty! :init)
   (js/console.log "Load complete"))
 
 (load)

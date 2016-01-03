@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="boat.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4"
+     inkscape:cx="462.24114"
+     inkscape:cy="586.42029"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1381"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       d="m 591.44339,438.44737 0.0312,0 c 0.29373,1.62868 3.24973,1.74214 6.84375,2.28125 3.78808,0.56822 18.40609,0.53065 27.75,0.59375 9.34391,0.0631 18.5,-2.96875 18.5,-2.96875 0.0353,-0.0541 0.0649,-0.0521 0,-0.0937 0,0 -9.15609,-3.03189 -18.5,-2.96875 -9.34391,0.0631 -23.96192,0.0255 -27.75,0.59375 -3.59402,0.53911 -6.55002,0.65257 -6.84375,2.28125 l -0.0312,0 c 0,0.0534 -0.005,0.10567 0,0.15625 -0.003,0.0409 0,0.0823 0,0.125 z"
+       id="path3061"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccssccsscccc"
+       inkscape:export-filename="/home/chouser/proj/boat-controller/rudder.png"
+       inkscape:export-xdpi="250.33572"
+       inkscape:export-ydpi="250.33572" />
+    <g
+       id="g3885"
+       inkscape:transform-center-x="-132.65645"
+       inkscape:transform-center-y="14.003981"
+       transform="matrix(0.96497805,-0.26233066,-0.26233066,-0.96497805,124.13412,948.75018)"
+       inkscape:export-filename="/home/chouser/proj/boat-controller/sail.png"
+       inkscape:export-xdpi="250.33572"
+       inkscape:export-ydpi="250.33572">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3854"
+         d="m 332.80557,438.57239 c 0,0 54.5,-45.25 119.75,-62 65.25,-16.75 141.5,-11.5 141.5,-11.5"
+         style="fill:#ffffff;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <rect
+         transform="matrix(-0.26177279,-0.96512953,0.96512953,-0.26177279,0,0)"
+         y="206.06229"
+         x="-514.10504"
+         height="272.66159"
+         width="7.4630065"
+         id="rect3852"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       id="g3900">
+      <path
+         inkscape:export-ydpi="250.33572"
+         inkscape:export-xdpi="250.33572"
+         inkscape:export-filename="/home/chouser/proj/boat-controller/hull.png"
+         sodipodi:nodetypes="ssssscccccccsssssccs"
+         inkscape:connector-curvature="0"
+         id="path3050"
+         d="m 68.56839,438.69739 c 0,10.24777 23.60784,16.01625 53.75,23.9375 35.96172,9.45061 81.19763,20.47881 106.6875,25.84375 46.27223,9.73907 104.51268,17.54552 153,22.34375 48.48732,4.79822 122.19104,-6.65958 156.40625,-11.9375 31.81611,-4.90785 121,-30.71875 121,-30.71875 0,0 11.92102,-1.871 13.03125,-27.875 l 0.004,0 c 0,-0.67438 -0.0181,-1.32253 -0.0312,-1.96875 0.0136,-0.65603 0.0312,-1.31492 0.0312,-2 l -0.004,0 c -1.11023,-26.004 -13.03125,-27.84375 -13.03125,-27.84375 0,0 -89.18389,-25.84215 -121,-30.75 -34.21521,-5.27792 -107.91893,-16.73572 -156.40625,-11.9375 -48.48732,4.79823 -106.72777,12.60468 -153,22.34375 -25.48987,5.36494 -70.72578,16.39314 -106.6875,25.84375 -30.14216,7.92125 -53.75,13.72098 -53.75,23.96875 0,0.0857 0.0237,0.16453 0.0312,0.25 -0.0114,0.0694 0.006,0.14919 0,0.21875 -0.008,0.0901 -0.0312,0.19091 -0.0312,0.28125 z"
+         style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         transform="translate(1.875,2.5416893)"
+         d="m 333.75,435.76508 a 4.125,4.125 0 1 1 -8.25,0 4.125,4.125 0 1 1 8.25,0 z"
+         sodipodi:ry="4.125"
+         sodipodi:rx="4.125"
+         sodipodi:cy="435.76508"
+         sodipodi:cx="329.625"
+         id="path3891"
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="path3893"
+         sodipodi:cx="329.625"
+         sodipodi:cy="435.76508"
+         sodipodi:rx="4.125"
+         sodipodi:ry="4.125"
+         d="m 333.75,435.76508 a 4.125,4.125 0 1 1 -8.25,0 4.125,4.125 0 1 1 8.25,0 z"
+         transform="matrix(0.62121212,0,0,0.62121212,400.38327,167.60422)" />
+    </g>
+  </g>
+</svg>

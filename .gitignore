@@ -7,4 +7,5 @@
 /resources/public/js
 /target
 /cljs.jar
+/hs_err*
 .#*
