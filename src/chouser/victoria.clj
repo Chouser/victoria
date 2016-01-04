@@ -26,8 +26,8 @@
         response))))
 
 (defn wrap-boat-ctrls [handler]
-  (fn [{:keys [uri body] :as request}]
-    (if (not= uri "/ctrl")
+  (fn [{:keys [request-method body] :as request}]
+    (if (not= :post request-method)
       (handler request)
       (do
         ;; TODO servo control goes here

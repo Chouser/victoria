@@ -1,7 +1,42 @@
+= Development environment
+
+To start autobuilding ClojureScript and start a ClojureScript REPL:
+
+-----
+rlwrap java -cp cljs.jar:src clojure.main browser-repl.clj
+-----
+
+While that is waiting for a browser to connect, start the web server:
+
+-----
+lein repl
+(def f (future (chouser.victoria/-main "8000")))
+-----
+
+Now point your browser at `http://<host>:8000/?repl` which should show
+the GUI and also allow the ClojureScript REPL to connect. You can now
+evaluate code in either REPL. Changes to the ClojureScript will be
+automatically compiled and trigger the browser to load the new code.
+Changes to the Clojure code will require a manual reload at the REPL,
+such as with `(require 'chouser.victoria :reload)`
+
+= Build release
+
+To build a uberjar for shipping to the Raspberry Pi:
+
+-----
+rlwrap java -cp cljs.jar:src clojure.main release.clj
+lein uberjar
+-----
+
+Run the uberjar on the Pi like this:
+
+-----
+java -jar victoria-0.0.1-standalone.jar
+-----
+
 = TODO
 
-- new graphics (show angle of sails & rudder)
 - translate control messages to servos
-- package for raspberry pi (AOT (jvm and js) in uberjar)
 - fix touch-stealing if fingers cross
 - send ctrl positions from server, in case of multiple clients (?)

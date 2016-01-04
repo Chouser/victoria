@@ -49,7 +49,7 @@
   (when-not (= ctrl-key :init)
     (schedule-send #(js/setTimeout % 1000)
                    #(net/transmit xhr
-                                  (str js/location "ctrl") "PUT"
+                                  js/location "POST"
                                   (-> {:sails (-> @ctrls :left :pos)
                                        :rudder (-> @ctrls :right :pos)}
                                       clj->js json/serialize)))))
@@ -125,4 +125,5 @@
 
 (load)
 
-(defonce conn (repl/connect "http://localhost:9000/repl"))
+(when (re-find #"repl" (str js/location))
+  (defonce conn (repl/connect "http://localhost:9000/repl")))
