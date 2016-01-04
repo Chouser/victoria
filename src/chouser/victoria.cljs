@@ -33,17 +33,20 @@
 (def schedule-draw (collater))
 (def schedule-send (collater))
 
+(defn scale [pos low high]
+  (+ low (* (- high low) (/ pos 1000))))
+
 (defn dirty! [ctrl-key]
   (schedule-draw #(js/requestAnimationFrame %)
                  (fn []
                    (set! (-> (dom/getElement "sails") .-style .-transform)
                          (str "rotate("
-                              (-> @ctrls :left :pos - (+ 1000) (/ 1000) (* 80) (+ 10))
+                              (-> @ctrls :left :pos (scale 90 10))
                               "deg)"))
 
                    (set! (-> (dom/getElement "rudder") .-style .-transform)
                          (str "rotate("
-                              (-> @ctrls :right :pos - (+ 1000) (/ 1000) (* 70) (- 35))
+                              (-> @ctrls :right :pos (scale -30 30))
                               "deg)"))))
 
   (when-not (= ctrl-key :init)

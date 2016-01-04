@@ -8,4 +8,5 @@
 /target
 /cljs.jar
 /hs_err*
+/dev-servoblaster
 .#*

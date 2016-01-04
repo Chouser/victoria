@@ -37,6 +37,14 @@ java -jar victoria-0.0.1-standalone.jar
 
 = TODO
 
-- translate control messages to servos
 - fix touch-stealing if fingers cross
 - send ctrl positions from server, in case of multiple clients (?)
+
+= Resources
+
+- http://stock.thundertiger.com/product/5556.html[The Victoria]
+- http://www.mcmelectronics.com/product/83-16459[Raspberry Pi A+]
+- http://www.servodatabase.com/servo/power-hd/hd-1201mg[Sails servo, HD-1201MG]
+- http://www.servodatabase.com/servo/futaba/s3003[Rudder servo, Futaba S3003]
+- http://cihatkeser.com/servo-control-with-raspberry-pi-in-5-minutes-or-less/[ServoBlaster setup instruction]
+- https://github.com/richardghirst/PiBits[ServoBlaster source]

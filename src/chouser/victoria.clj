@@ -5,9 +5,12 @@
             ring.middleware.not-modified
             [ring.adapter.jetty :as jetty]
             [clj-json.core :as json]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.pprint :refer [pprint]]
+            [clojure.java.io :as io]))
 
 (set! *warn-on-reflection* true)
+
+(def ^java.io.BufferedWriter servo-dev (io/writer "dev-servoblaster"))
 
 (defn default-handler [{:keys [^String uri] :as request}]
   {:default? true
@@ -25,13 +28,18 @@
         (handler (update request :uri str filename))
         response))))
 
+(defn scale [pos low high]
+  (+ low (/ (* pos (- high low)) 1000)))
+
 (defn wrap-boat-ctrls [handler]
   (fn [{:keys [request-method body] :as request}]
     (if (not= :post request-method)
       (handler request)
-      (do
-        ;; TODO servo control goes here
-        (prn (json/parse-string (slurp body)))
+      (let [{:strs [sails rudder]} (json/parse-string (slurp body))]
+        (.write servo-dev (format "0=%dus\n1=%dus\n"
+                                  (scale sails 1000 2000)
+                                  (scale rudder 500 3000)))
+        (.flush servo-dev)
         {:status 200
          :headers {"Content-Type" "text/html"}
          :body "ok"}))))
