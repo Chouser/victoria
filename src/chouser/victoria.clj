@@ -28,8 +28,8 @@
         (handler (update request :uri str filename))
         response))))
 
-(defn scale [pos low high]
-  (+ low (/ (* pos (- high low)) 1000)))
+(defn scale ^long [^long pos, ^long low, ^long high]
+  (long (+ low (/ (* pos (- high low)) 1000))))
 
 (defn wrap-boat-ctrls [handler]
   (fn [{:keys [request-method body] :as request}]
