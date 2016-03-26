@@ -8,15 +8,27 @@
             [goog.events :as events]))
 (enable-console-print!)
 
+(def maxpos 1000)
+(def ctrl-scale 2.0)
+(def ctrls (atom {:ids {} :left {:pos 1000} :right {:pos 500}}))
+(def config (atom nil))
+
+(declare dirty!)
+
 (def xhr
   (doto (net/xhr-connection)
     (event/listen :complete
                   (fn [e]
-                    (js/console.log "Response" (.getResponseText (.-target e)))))))
+                    ;; (js/console.log "Response" (.getResponseText (.-target e)))
+                    (let [resp (json/parse (.getResponseText (.-target e)))]
+                      (when-let [config-val (.-config resp)]
+                        (reset! config config-val)
+                        (dirty! :init)
+                        (js/console.log "Applied config")))))))
 
-(def maxpos 1000)
-(def ctrl-scale 2.0)
-(def ctrls (atom {:ids {} :left {:pos 1000} :right {:pos 500}}))
+(def url
+  (let [loc-str (str js/location)]
+    (subs loc-str 0 (- (count loc-str) (count (.-hash js/location))))))
 
 (defn xy [touch]
   [(.-clientX touch) (.-clientY touch)])
@@ -37,25 +49,29 @@
   (+ low (* (- high low) (/ pos 1000))))
 
 (defn dirty! [ctrl-key]
-  (schedule-draw #(js/requestAnimationFrame %)
-                 (fn []
-                   (set! (-> (dom/getElement "sails") .-style .-transform)
-                         (str "rotate("
-                              (-> @ctrls :left :pos (scale 90 10))
-                              "deg)"))
+  (when @config
+    (schedule-draw
+     #(js/requestAnimationFrame %)
+     (fn []
+       (set! (-> (dom/getElement "sails") .-style .-transform)
+             (str "rotate("
+                  (apply scale (-> @ctrls :left :pos)
+                         (-> @config .-sails .-viz-range))
+                  "deg)"))
 
-                   (set! (-> (dom/getElement "rudder") .-style .-transform)
-                         (str "rotate("
-                              (-> @ctrls :right :pos (scale -30 30))
-                              "deg)"))))
+       (set! (-> (dom/getElement "rudder") .-style .-transform)
+             (str "rotate("
+                  (apply scale (-> @ctrls :right :pos)
+                         (-> @config .-rudder .-viz-range))
+                  "deg)"))))
 
-  (when-not (= ctrl-key :init)
-    (schedule-send #(js/setTimeout % 1000)
-                   #(net/transmit xhr
-                                  js/location "POST"
-                                  (-> {:sails (-> @ctrls :left :pos)
-                                       :rudder (-> @ctrls :right :pos)}
-                                      clj->js json/serialize)))))
+    (when-not (= ctrl-key :init)
+      (schedule-send #(js/setTimeout % (-> @config .-servo-delay))
+                     #(net/transmit xhr
+                                    (str url "/ctrl") "POST"
+                                    (-> {:sails (-> @ctrls :left :pos)
+                                         :rudder (-> @ctrls :right :pos)}
+                                        clj->js json/serialize))))))
 
 (defn touchstart [event]
   (.preventDefault event)
@@ -82,9 +98,11 @@
                  (fn [ctrls]
                    (let [old-pos (-> ctrls ctrl-key :pos)]
                      (-> ctrls
-                         (assoc ctrl-key {:pos old-pos
-                                          :drag-offset (- (* height (/ old-pos maxpos ctrl-scale)) y)
-                                          :x x})
+                         (assoc ctrl-key
+                           {:pos old-pos
+                            :drag-offset (- (* (/ old-pos maxpos ctrl-scale)
+                                               height) y)
+                            :x x})
                          (assoc-in [:ids (.-identifier touch)] ctrl-key)))))
           #_(prn ctrl-key @ctrls))))))
 
@@ -95,13 +113,16 @@
           [x y] (xy touch)]
       (swap! ctrls update ctrl-key
              (fn [ctrl]
-               (let [pos (Math/round (* ctrl-scale (/ maxpos height) (+ y (:drag-offset ctrl))))]
+               (let [pos (Math/round (* ctrl-scale (/ maxpos height)
+                                        (+ y (:drag-offset ctrl))))]
                  (-> (if (= type :end)
                        (dissoc ctrl :x)
                        (assoc ctrl :x x))
                      (merge (cond
                              (< pos 0) {:pos 0, :drag-offset (- y)}
-                             (> pos maxpos) {:pos maxpos, :drag-offset (- (/ height ctrl-scale) y)}
+                             (> pos maxpos) {:pos maxpos,
+                                             :drag-offset (- (/ height
+                                                                ctrl-scale) y)}
                              :else {:pos pos}))))))
 
       (when (= type :end)
@@ -113,7 +134,7 @@
     (dom/removeNode main-elem))
 
   (let [main-elem (dom/createDom "div" (js-obj "id" "main")
-                    (dom/createDom "h1" nil (dom/createTextNode "Victoria"))
+                    "Victoria"
                     (dom/createDom "div" (js-obj "id" "sails" "class" "ctrl"))
                     (dom/createDom "div" (js-obj "id" "rudder" "class" "ctrl")))]
     (dom/append (.-body js/document) main-elem)
@@ -122,6 +143,9 @@
       (events/listen "touchstart" touchstart)
       (events/listen "touchmove" (partial touchupdate :move))
       (events/listen "touchend"  (partial touchupdate :end))))
+
+  ;; request configs from server
+  (net/transmit xhr (str url "/config") "GET")
 
   (dirty! :init)
   (js/console.log "Load complete"))

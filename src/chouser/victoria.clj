@@ -4,13 +4,12 @@
             ring.middleware.content-type
             ring.middleware.not-modified
             [ring.adapter.jetty :as jetty]
-            [clj-json.core :as json]
+            [clojure.data.json :as json]
             [clojure.pprint :refer [pprint]]
+            [clojure.string :as str]
             [clojure.java.io :as io]))
 
 (set! *warn-on-reflection* true)
-
-(def ^java.io.BufferedWriter servo-dev (io/writer "dev-servoblaster"))
 
 (defn default-handler [{:keys [^String uri] :as request}]
   {:default? true
@@ -31,28 +30,49 @@
 (defn scale ^long [^long pos, ^long low, ^long high]
   (long (+ low (/ (* pos (- high low)) 1000))))
 
-(defn wrap-boat-ctrls [handler]
-  (fn [{:keys [request-method body] :as request}]
-    (if (not= :post request-method)
-      (handler request)
-      (let [{:strs [sails rudder]} (json/parse-string (slurp body))]
-        (.write servo-dev (format "0=%dus\n1=%dus\n"
-                                  (scale sails 1000 2000)
-                                  (scale rudder 500 3000)))
-        (.flush servo-dev)
-        {:status 200
-         :headers {"Content-Type" "text/html"}
-         :body "ok"}))))
+(def json-reply
+  (memoize
+   (fn [obj]
+     {:status 200
+      :header {"Content-Type" "text/json"}
+      :body (json/write-str obj :key-fn #(str/replace (name %) #"-" "_"))})))
 
-(def app
-  (-> default-handler
-      (ring.middleware.resource/wrap-resource "public")
-      (ring.middleware.content-type/wrap-content-type)
-      (ring.middleware.not-modified/wrap-not-modified)
-      (wrap-boat-ctrls)
-      (wrap-dir-file "/index.html")))
+(defn wrap-boat-ctrls [handler, config,
+                       ^java.io.BufferedWriter servo-writer]
+  (fn [{:keys [request-method body uri] :as request}]
+    (cond
+     (and (= uri "/ctrl") (= request-method :post))
+     (let [{:keys [sails rudder]} (json/read-str (slurp body) :key-fn keyword)]
+       (.write servo-writer
+               (format "0=%dus\n1=%dus\n"
+                       (apply scale sails  (-> config :sails  :servo-range))
+                       (apply scale rudder (-> config :rudder :servo-range))))
+       (.flush servo-writer)
+       (json-reply {}))
+     (and (= uri "/config") (= request-method :get))
+     (json-reply {:config config})
+     :else (handler request))))
+
+(defn wrap-canonical-uri [handler]
+  (fn request [{:keys [uri] :as request}]
+    (loop [previous-uri uri]
+      (let [simpler-uri (str/replace previous-uri #"/\.\./[^/]+|//+" "/")]
+        (if (not= simpler-uri previous-uri)
+          (recur simpler-uri)
+          (handler (assoc request :uri previous-uri)))))))
+
+(defn app [config]
+  (let [servo-writer (io/writer (:servo-dev config))]
+    (-> default-handler
+        (ring.middleware.resource/wrap-resource "public")
+        (ring.middleware.content-type/wrap-content-type)
+        (ring.middleware.not-modified/wrap-not-modified)
+        (wrap-boat-ctrls config servo-writer)
+        (wrap-dir-file "/index.html")
+        (wrap-canonical-uri))))
 
 (defn -main
   ([] (-main "80"))
   ([port]
-     (jetty/run-jetty #'app {:port (Long/parseLong port)})))
+     (let [config (read-string (slurp "victoria-conf.clj"))]
+       (jetty/run-jetty (app config) {:port (Long/parseLong port)}))))

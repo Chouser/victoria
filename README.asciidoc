@@ -25,7 +25,7 @@ such as with `(require 'chouser.victoria :reload)`
 To build a uberjar for shipping to the Raspberry Pi:
 
 -----
-rlwrap java -cp cljs.jar:src clojure.main release.clj
+java -cp cljs.jar:src clojure.main release.clj
 lein uberjar
 -----
 
